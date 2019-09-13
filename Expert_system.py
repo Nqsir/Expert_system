@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 import re
 
 
@@ -27,9 +28,23 @@ if __name__ == '__main__':
 
             # DEBUG
             for ext in extracted_file:
-                print(ext)
+                if ext.startswith('='):
+                    queries.append(ext)
+                elif ext.startswith('?'):
+                    facts.append(ext)
+                else:
+                    rules.append(ext)
 
+            if len(queries) > 1 or not queries:
+                sys.exit(print('Problem with queries'))
+            if len(facts) > 1 or not facts:
+                sys.exit(print('Problem with facts'))
+            if not rules:
+                sys.exit(print('Problem with rules'))
 
+            print(f'queries = {queries}')
+            print(f'facts = {facts}')
+            print(f'rules = {rules}')
 
         except PermissionError:
             print('Permission error, failed opening the file')
