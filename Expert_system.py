@@ -26,7 +26,6 @@ if __name__ == '__main__':
                         else:
                             extracted_file.append(line)
 
-            # DEBUG
             for ext in extracted_file:
                 if ext.startswith('='):
                     queries.append(ext)
@@ -35,16 +34,16 @@ if __name__ == '__main__':
                 else:
                     rules.append(ext)
 
+            print(f'queries = {queries}')
+            print(f'facts = {facts}')
+            print(f'rules = {rules}')
+
             if len(queries) > 1 or not queries:
                 sys.exit(print('Problem with queries'))
             if len(facts) > 1 or not facts:
                 sys.exit(print('Problem with facts'))
             if not rules:
                 sys.exit(print('Problem with rules'))
-
-            print(f'queries = {queries}')
-            print(f'facts = {facts}')
-            print(f'rules = {rules}')
 
         except PermissionError:
             print('Permission error, failed opening the file')
