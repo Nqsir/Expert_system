@@ -4,6 +4,51 @@ import sys
 import re
 
 
+def check_elements(x_file):
+    elements = []
+    rules = []
+    facts = []
+    queries = []
+
+    # Problem with regex => Either denying a part of the expression either get each element one by one, but parsing
+    # would have to be done afterward
+
+    # Link to the atual REGEX working, still need a lot of parse
+
+    for x_line in x_file:
+        x_line = x_line.replace(' ', '')
+        print(f'{x_line}')
+        facts_pattern = re.findall(r'''
+                                   ^([=])([A-Z]*)
+                                   '''
+                                   , x_line, re.VERBOSE)
+        queries_pattern = re.findall(r'''
+                                     ^([?])([A-Z]*) 
+                                     '''
+                                     , x_line, re.VERBOSE)
+        rules_pattern = re.findall(r'''
+                                   ^(\(*!?[A-Z])
+                                   ([\+\|\^]\(*!?[A-Z]\)*)*
+                                   (<=>|=>)
+                                   (\(*!?[A-Z])
+                                   ([\+\|\^]\(*!?[A-Z]\)*)*
+                                    ''', x_line, re.VERBOSE)
+        # print(rules_pattern)
+        # print(queries_pattern)
+        # print(facts_pattern)
+        # if rules_pattern:
+        #     print(f'Rules pattern:')
+        #     for elem in rules_pattern:
+        #         print(f'elem = {elem}')
+
+    print(f'elements = {elements}')
+
+    # Renvoyer equivalent list gauche list droite (conditions / conclusion)
+    # Sur liste gquche rajouter pre;ier element / char '(' et dernier element ')'
+
+    return
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='py Expert_system.py')
     parser.add_argument('text_file', help='A text file with instructions')
@@ -13,9 +58,6 @@ if __name__ == '__main__':
 
     if os.path.exists(file)and os.path.isfile(file) and file.endswith('.txt'):
         try:
-            rules = []
-            facts = []
-            queries = []
             extracted_file = []
             with open(file, 'r') as in_file:
                 for line in in_file:
@@ -24,26 +66,17 @@ if __name__ == '__main__':
                             rest = line.split('#')
                             extracted_file.append(rest[0])
                         else:
-                            extracted_file.append(line)
+                            rest = line.split('\n')
+                            extracted_file.append(rest[0])
 
-            for ext in extracted_file:
-                if ext.startswith('='):
-                    queries.append(ext)
-                elif ext.startswith('?'):
-                    facts.append(ext)
-                else:
-                    rules.append(ext)
+            check_elements(extracted_file)
 
-            print(f'queries = {queries}')
-            print(f'facts = {facts}')
-            print(f'rules = {rules}')
-
-            if len(queries) > 1 or not queries:
-                sys.exit(print('Problem with queries'))
-            if len(facts) > 1 or not facts:
-                sys.exit(print('Problem with facts'))
-            if not rules:
-                sys.exit(print('Problem with rules'))
+            # if len(queries) > 1 or not queries:
+            #     sys.exit(print('Problem with queries'))
+            # if len(facts) > 1 or not facts:
+            #     sys.exit(print('Problem with facts'))
+            # if not rules:
+            #     sys.exit(print('Problem with rules'))
 
         except PermissionError:
             print('Permission error, failed opening the file')
