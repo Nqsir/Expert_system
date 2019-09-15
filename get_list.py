@@ -1,6 +1,6 @@
 CONST_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-var = ["(!A+B+!C)=>Z", "(D+(!E+F))=>A", "(D|F)=>C", "(G+H)=>Z", "(F)=>D", "(A|J+S)=>Z"]
+var = ["(!A+B+!C)=>Z", "(D+(!E+F))=>A", "(D|F)=>C", "(G+H)=>Z", "(F)=>D", "(D+G)=>X", "(A|J+S)=>Z"]
 
 list_total = []
 list_if = []
