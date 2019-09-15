@@ -10,10 +10,7 @@ def check_elements(x_file):
     facts = []
     queries = []
 
-    # Problem with regex => Either denying a part of the expression either get each element one by one, but parsing
-    # would have to be done afterward
-
-    # Link to the atual REGEX working, still need a lot of parse
+    # Link to the atual REGEX working, still need a lot of parse : https://regex101.com/r/2x2D3C/4
 
     for x_line in x_file:
         x_line = x_line.replace(' ', '')
@@ -28,10 +25,10 @@ def check_elements(x_file):
                                      , x_line, re.VERBOSE)
         rules_pattern = re.findall(r'''
                                    ^(\(*!?[A-Z])
-                                   ([\+\|\^]\(*!?[A-Z]\)*)*
+                                   (([\+\|\^]\(*!?[A-Z]\)*)*)
                                    (<=>|=>)
                                    (\(*!?[A-Z])
-                                   ([\+\|\^]\(*!?[A-Z]\)*)*
+                                   (([\+\|\^]\(*!?[A-Z]\)*)*)
                                     ''', x_line, re.VERBOSE)
         # print(rules_pattern)
         # print(queries_pattern)
