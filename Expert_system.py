@@ -10,10 +10,7 @@ def check_elements(x_file):
     facts = []
     queries = []
 
-    # Problem with regex => Either denying a part of the expression either get each element one by one, but parsing
-    # would have to be done afterward
-
-    # Link to the atual REGEX working, still need a lot of parse
+    # Link to the atual REGEX working, still need a lot of parse : https://regex101.com/r/2x2D3C/4
 
     for x_line in x_file:
         x_line = x_line.replace(' ', '')
@@ -28,18 +25,21 @@ def check_elements(x_file):
                                      , x_line, re.VERBOSE)
         rules_pattern = re.findall(r'''
                                    ^(\(*!?[A-Z])
-                                   ([\+\|\^]\(*!?[A-Z]\)*)*
+                                   (([\+\|\^]\(*!?[A-Z]\)*)*)
                                    (<=>|=>)
                                    (\(*!?[A-Z])
-                                   ([\+\|\^]\(*!?[A-Z]\)*)*
+                                   (([\+\|\^]\(*!?[A-Z]\)*)*)
                                     ''', x_line, re.VERBOSE)
-        # print(rules_pattern)
-        # print(queries_pattern)
-        # print(facts_pattern)
-        # if rules_pattern:
-        #     print(f'Rules pattern:')
-        #     for elem in rules_pattern:
-        #         print(f'elem = {elem}')
+        if queries_pattern:
+            print(f'queries_pattern: {queries_pattern}')
+
+        if facts_pattern:
+            print(f'facts_pattern: {facts_pattern}')
+
+        if rules_pattern:
+            # Before get rid of '', need to delete some groups e.g. if group 2 then delete group3
+            rules_pattern[0] = [x for x in rules_pattern[0] if x]
+            print(f'rules_pattern: {rules_pattern[0]}')
 
     print(f'elements = {elements}')
 
