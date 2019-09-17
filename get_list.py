@@ -1,5 +1,7 @@
-CONST_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+from Errors import disp_errors_dict
 
+CONST_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+OK = 0
 def if_exist(list, element):
     for elem in list:
         if element == elem:
@@ -35,13 +37,14 @@ def simply_list(list):
             for y, line_search in enumerate(list_if):
                 for n, elem in enumerate(line_search):
                     if if_exist(list_if[y-1], list_then[y-1][0]):
-                        print("LOOP ERROR : ", elem_search, " => ", line_search)
-                        return True
+                        msg = elem_search[0][0]
+                        return 'loop', msg
                     if elem == elem_search[0]:
                         line_search.pop(n)
                         for o, elt in enumerate(list_if[x]):
                             line_search.insert(n + o, elt)
                         flag_next = 1
+    return OK
 
 
 def convert_to_only_one_then(list):
@@ -88,9 +91,9 @@ def translat_to_list(list):
     list.clear()
     list.append(to_list(list_if))
     list.append(to_list(list_then))
-
     convert_to_only_one_then(list)
-    simply_list(list)
+    errors = simply_list(list)
+    return errors
 
 
 
@@ -100,8 +103,8 @@ def translat_to_list(list):
 #
 
 #var = ["(A+!B+C|A)=>Z+(!V)", "(!G+!H)=>(A)+(Z)", "(A|J+S)=>Z"]
-#var = ["(A+(C|Y)+B+(C|D)+E)=>F", "(C+Z)=>F", "(G+H|I)=>C", "(J|K)=>H", "(K+(C|L))=>J"]
-var = ["(A)=>B", "(B)=>C", "(C)=>A"]
+var = ["(A+(C|Y)+B+(C|D)+E)=>F", "(C+Z)=>F", "(G+H|I)=>C", "(J|K)=>H", "(K+(C|L))=>J"]
+#var = ["(A)=>B", "(B)=>C", "(C)=>A"]
 
 list_total = []
 
@@ -117,7 +120,9 @@ for elt in list_total:
     print("\t\t", elt[1])
 
 
-translat_to_list(list_total)
+errors = translat_to_list(list_total)
+if errors:
+    disp_errors_dict(errors)
 
 
 print("AFTER :")
