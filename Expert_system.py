@@ -86,8 +86,8 @@ def check_elements(x_file):
                 if open_2 != close_2:
                     return 'par2', x_line
 
-            exp_if = re.findall(r'''([A-Z])''', rules_pattern[0][0])
-            exp_then = re.findall(r'''([A-Z])''', rules_pattern[0][3])
+            exp_if = re.findall(r'''(!?[A-Z])''', rules_pattern[0][0])
+            exp_then = re.findall(r'''(!?[A-Z])''', rules_pattern[0][3])
 
             for l in exp_if:
                 if l in exp_then:

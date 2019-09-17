@@ -8,15 +8,12 @@ A + !B => F # A and not B implies F
 C | !G => H 
 V ^ W => X # V xor W implies X
 A + B => Y + Z # A and B implies Y and Z
-C | D => X | V # C or D implies X or V
 E + F => !V # E and F implies not V
 A + B => C # A and B if and only if C
 A + B => !C 
 A+B+(C|!G)=>Y+Z 
 (C|!G) + (V ^ W) => A + B #FLUUUUUUUUU # FLUUUUU # FUUUUUUUUU
 A + B + (C + (D | (E + F))) => G
-A |(B + (C + (D | (E + F)) + C)
-(((((((!A|(B+(C+(D|(E+F))+C)=>(((((((!A|(B+(C+(D|(E+F))+C) #SHLI BI DU
 # IDC A + B => G
 
 =ABG # Initial facts : A, B and G are true. All others are false.
