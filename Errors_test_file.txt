@@ -1,0 +1,63 @@
+####
+#	Wrong order
+####
+#=QWER
+#?ASD
+
+
+
+####
+#	Parentheses
+####
+#((C)=>E
+#))A|B=>C
+#A)))=>((((C))))
+#(((A=>((((C))))
+#(C|!G=>H
+#(A|B=>C)
+
+
+####
+#	Ambiguous condition
+####
+
+#(C)=>E +      C
+#C|D=>X|V
+
+
+####
+#	Non existing rule
+####
+
+#A+B<=>C
+#A+B=>=>C
+#a+b=>=>c
+#[A] + [C] => [C]
+# A-B<=>C
+#.....A.B.=.C.
+#A|(B+(C+(D|(E+F))+C)       
+#A++!B=>F
+#A!+!B=>F
+#A)(=>((((C))))
+#C => X+(|V)
+#!!A + !!B => !!C
+
+
+(A) + (B) => C + (D^E)
+
+!A+!B+!C=>!D
+
+
+A+!B=>F
+
+        
+(((A)))=>((((C))))
+     
+
+A+B+(C+(D|(E+F)))=>G
+(!A+(B+(C+(D+(E+F))+C)))=>!Z
+((((((!A|(B+(C+(D|(E+F))+C))))))))=>Y+Z+V
+
+
+=
+?GVX # Queries : What are G, V and X ?

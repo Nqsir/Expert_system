@@ -1,12 +1,13 @@
 CONST_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+
 def simply_list(list):
     list_if = list[0]
     list_then = list[1]
 
     x = 0
     while x < len(list_then):
-        y = x+1
+        y = x + 1
         while y < len(list_then):
             if list_then[x] == list_then[y]:
                 list_start = ["|"]
@@ -14,7 +15,7 @@ def simply_list(list):
                 list_if[x].extend(list_if[y])
                 del list_if[y]
                 del list_then[y]
-                y = y-1
+                y = y - 1
             y = y + 1
         x = x + 1
 
