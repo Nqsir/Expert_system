@@ -87,7 +87,7 @@ def check_elements(x_file):
     print(f'facts = {facts}')
     print(f'queries = {queries}')
 
-    return OK, ''
+    return OK
 
 
 if __name__ == '__main__':
