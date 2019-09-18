@@ -77,20 +77,22 @@ def check_elements(x_file):
     if not rules:
         return 'rule_0', ''
 
+    max_l = len(max([_[0] for _ in rules], key=len))
+
     print('\nrules = \n'
-          f'{"IF":45s}\t{"THEN"}')
+          f'{"IF":{max_l + 5}s}\t{"THEN"}')
     for r in rules:
-        print(f'{r[0]:45s}\t{r[1]:s}')
+        print(f'{r[0]:{max_l + 5}s}\t{r[1]:s}')
     print('\n')
     print(f'facts = {facts}')
     print(f'queries = {queries}')
 
-    return OK
+    return OK, ''
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='py Expert_system.py')
-    parser.add_argument('text_file', help='A text file with instructions')
+    parser.add_argument('text_file', help='A text file containing instructions')
     args = parser.parse_args()
 
     file = os.path.join(os.getcwd(), args.text_file)

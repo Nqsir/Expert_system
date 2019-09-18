@@ -2,6 +2,8 @@ from Errors import disp_errors_dict
 
 CONST_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 OK = 0
+
+
 def if_exist(list, element):
     for elem in list:
         if element == elem:
@@ -102,9 +104,9 @@ def translat_to_list(list):
 # utilise une liste double en entrer : liste[[if],[then]]
 #
 
-#var = ["(A+!B+C|A)=>Z+(!V)", "(!G+!H)=>(A)+(Z)", "(A|J+S)=>Z"]
-var = ["(A+(C|Y)+B+(C|D)+E)=>F", "(C+Z)=>F", "(G+H|I)=>C", "(J|K)=>H", "(K+(C|L))=>J"]
-#var = ["(A)=>B", "(B)=>C", "(C)=>A"]
+# var = ["(A+!B+C|A)=>Z+(!V)", "(!G+!H)=>(A)+(Z)", "(A|J+S)=>Z"]
+# var = ["(A+(C|Y)+B+(C|D)+E)=>F", "(C+Z)=>F", "(G+H|I)=>C", "(J|K)=>H", "(K+(C|L))=>J"]
+var = ["(A)=>B", "(B)=>C", "(C)=>A"]
 
 list_total = []
 
@@ -132,3 +134,4 @@ for elt in list_total[0]:
 print("\tTHEN :")
 for elt in list_total[1]:
     print("\t\t", elt)
+
