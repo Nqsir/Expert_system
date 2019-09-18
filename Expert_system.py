@@ -46,7 +46,7 @@ def check_elements(x_file):
                 return 'fact_1', x_line
 
         elif rules_pattern:
-            if '|' in rules_pattern[0][3]:
+            if '|' in rules_pattern[0][3] or '^' in rules_pattern[0][3]:
                 return 'or', x_line
             if facts or queries:
                 return 'rule_1', x_line
