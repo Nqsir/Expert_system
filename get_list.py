@@ -1,29 +1,29 @@
 import re
-from Errors import disp_errors_dict
 
 CONST_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 OK = 0
 
-def list_to_str(list):
-    for n, elt in enumerate(list):
+
+def list_to_str(list_):
+    for n, elt in enumerate(list_):
         string = re.sub(r'''\[*\]*\'*\s*,*''', '', str(elt))
         while True:
             string = re.sub(r'''(\()(!?[A-Z])(\))''', r'\2', string)
             if not re.findall(r'''(\(!?[A-Z]\))''', string):
                 break
-        list[n] = [string]
+        list_[n] = [string]
 
 
-def if_exist(list, element):
-    for elem in list:
+def if_exist(list_, element):
+    for elem in list_:
         if element == elem:
             return True
     return False
 
 
-def simply_list(list):
-    list_if = list[0]
-    list_then = list[1]
+def simply_list(list_):
+    list_if = list_[0]
+    list_then = list_[1]
 
     x = 0
     while x < len(list_then):
@@ -57,14 +57,14 @@ def simply_list(list):
                         for o, elt in enumerate(list_if[x]):
                             line_search.insert(n + 1 + o, elt)
                         flag_next = 1
-    list_to_str(list[0])
-    list_to_str(list[1])
+    list_to_str(list_[0])
+    list_to_str(list_[1])
     return OK
 
 
-def convert_to_only_one_then(list):
-    list_if = list[0]
-    list_then = list[1]
+def convert_to_only_one_then(list_):
+    list_if = list_[0]
+    list_then = list_[1]
     list_and = ["+"]
 
     for n, line in enumerate(list_then):
@@ -81,9 +81,9 @@ def convert_to_only_one_then(list):
             x = x + 1
 
 
-def to_list(list):
+def to_list(list_):
     tmp = []
-    for elt in list:
+    for elt in list_:
         list_tmp_var = []
         for n, char in enumerate(elt):
             list_tmp = []
@@ -97,54 +97,29 @@ def to_list(list):
     return tmp
 
 
-def translat_to_list(list):
+def translat_to_list(list_total):
     list_if = []
     list_then = []
-    for n, elt in enumerate(list):
+    for n, elt in enumerate(list_total):
         list_if.append(elt[0])
         list_then.append([x for x in elt[1] if x != '(' and x != ')'])
-    list.clear()
-    list.append(to_list(list_if))
-    list.append(to_list(list_then))
-    convert_to_only_one_then(list)
-    errors = simply_list(list)
+    list_total.clear()
+    list_total.append(to_list(list_if))
+    list_total.append(to_list(list_then))
+    convert_to_only_one_then(list_total)
+
+    # Only Prints
+    max_l = len(max([_ for _ in list_total[0]], key=len))
+    print('\nrules = \n'
+          f'{"IF":{max_l + 5}s}\t{"THEN"}')
+    print(f'{"-------":{max_l + 5}s}\t{"-------"}')
+    for n in range(len(list_total[0])):
+        str_1 = re.sub(r'''\[*\]*\'*\s*,*''', '', str(list_total[0][n]))
+        str_2 = re.sub(r'''\[*\]*\'*\s*,*''', '', str(list_total[1][n]))
+        print(f'{str_1:{max_l + 5}s}\t{str_2:s}')
+    print('\n')
+
+    errors = simply_list(list_total)
     return errors
 
 
-#
-# utilise une liste double en entrer : liste[[if],[then]]
-#
-
-# var = ["(A+!B+C|A)=>Z+(!V)", "(!G+!H)=>(A)+(Z)", "(A|J+S)=>Z"]
-# var = ["(A+(C|Y)+B+(C|D)+E)=>F", "(C+Z)=>F", "(G+H|I)=>C", "(J|K)=>H", "(K+(C|L))=>J"]
-# var = ["(A)=>B", "(B)=>C", "(C)=>A"]
-
-var = ["(P)=>Q", "(Q+J)=>G", "(F)=>E", "(F+D)=>C", "(D+G)=>C", "(E+D)=>C", "(J)=>B", "(B+C)=>A"]
-
-
-list_total = []
-
-for elt in var:
-    list_total.append(elt.split("=>"))
-
-print("BEFORE :")
-print("\tIF :")
-for elt in list_total:
-    print("\t\t", elt[0])
-print("\tTHEN :")
-for elt in list_total:
-    print("\t\t", elt[1])
-
-
-errors = translat_to_list(list_total)
-if errors:
-    disp_errors_dict(errors)
-
-
-print("AFTER :")
-print("\tIF :")
-for elt in list_total[0]:
-    print("\t\t", elt[0])
-print("\tTHEN :")
-for elt in list_total[1]:
-    print("\t\t", elt[0])

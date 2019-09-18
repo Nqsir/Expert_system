@@ -2,6 +2,7 @@ import argparse
 import os
 import re
 from Errors import disp_errors_dict
+from get_list import *
 
 OK = 0
 
@@ -9,8 +10,8 @@ OK = 0
 def check_elements(x_file):
     rules = []
     facts = []
-    fact = 0
     queries = []
+    fact = 0
 
     # Link to the working REGEX, still need a lot of parse : https://regex101.com/r/2x2D3C/6
 
@@ -81,11 +82,17 @@ def check_elements(x_file):
 
     print('\nrules = \n'
           f'{"IF":{max_l + 5}s}\t{"THEN"}')
+    print(f'{"-------":{max_l + 5}s}\t{"-------"}')
     for r in rules:
         print(f'{r[0]:{max_l + 5}s}\t{r[1]:s}')
     print('\n')
+
     print(f'facts = {facts}')
     print(f'queries = {queries}')
+
+    errors = translat_to_list(rules)
+    if errors:
+        return errors
 
     return OK
 
@@ -113,7 +120,6 @@ if __name__ == '__main__':
                         extracted_file.append(rest[0])
 
             errors = check_elements(extracted_file)
-
             if errors:
                 disp_errors_dict(errors)
 
