@@ -1,3 +1,4 @@
+import re
 from Errors import disp_errors_dict
 
 CONST_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -130,8 +131,8 @@ if errors:
 print("AFTER :")
 print("\tIF :")
 for elt in list_total[0]:
-    print("\t\t", elt)
+    print("\t\t", re.sub(r'''\[*\]*\'*\s*,*''', '', str(elt)))
 print("\tTHEN :")
 for elt in list_total[1]:
-    print("\t\t", elt)
+    print("\t\t", re.sub(r'''\[*\]*\'*\s*,*''', '', str(elt)))
 
