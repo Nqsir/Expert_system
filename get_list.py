@@ -4,6 +4,15 @@ from Errors import disp_errors_dict
 CONST_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 OK = 0
 
+def list_to_str(list):
+    for n, elt in enumerate(list):
+        string = re.sub(r'''\[*\]*\'*\s*,*''', '', str(elt))
+        while True:
+            string = re.sub(r'''(\()(!?[A-Z])(\))''', r'\2', string)
+            if not re.findall(r'''(\(!?[A-Z]\))''', string):
+                break
+        list[n] = [string]
+
 
 def if_exist(list, element):
     for elem in list:
@@ -21,8 +30,7 @@ def simply_list(list):
         y = x+1
         while y < len(list_then):
             if list_then[x] == list_then[y]:
-                list_start = ["|"]
-                list_if[x].append(list_start)
+                list_if[x].append(["|"])
                 list_if[x].extend(list_if[y])
                 del list_if[y]
                 del list_then[y]
@@ -44,9 +52,13 @@ def simply_list(list):
                         return 'loop', msg
                     if elem == elem_search[0]:
                         line_search.pop(n)
+                        line_search.insert(n, ["("])
+                        line_search.insert(n + 1, [")"])
                         for o, elt in enumerate(list_if[x]):
-                            line_search.insert(n + o, elt)
+                            line_search.insert(n + 1 + o, elt)
                         flag_next = 1
+    list_to_str(list[0])
+    list_to_str(list[1])
     return OK
 
 
@@ -99,15 +111,16 @@ def translat_to_list(list):
     return errors
 
 
-
-
 #
 # utilise une liste double en entrer : liste[[if],[then]]
 #
 
 # var = ["(A+!B+C|A)=>Z+(!V)", "(!G+!H)=>(A)+(Z)", "(A|J+S)=>Z"]
 # var = ["(A+(C|Y)+B+(C|D)+E)=>F", "(C+Z)=>F", "(G+H|I)=>C", "(J|K)=>H", "(K+(C|L))=>J"]
-var = ["(A)=>B", "(B)=>C", "(C)=>A"]
+# var = ["(A)=>B", "(B)=>C", "(C)=>A"]
+
+var = ["(P)=>Q", "(Q+J)=>G", "(F)=>E", "(F+D)=>C", "(D+G)=>C", "(E+D)=>C", "(J)=>B", "(B+C)=>A"]
+
 
 list_total = []
 
@@ -131,8 +144,7 @@ if errors:
 print("AFTER :")
 print("\tIF :")
 for elt in list_total[0]:
-    print("\t\t", re.sub(r'''\[*\]*\'*\s*,*''', '', str(elt)))
+    print("\t\t", elt[0])
 print("\tTHEN :")
 for elt in list_total[1]:
-    print("\t\t", re.sub(r'''\[*\]*\'*\s*,*''', '', str(elt)))
-
+    print("\t\t", elt[0])
