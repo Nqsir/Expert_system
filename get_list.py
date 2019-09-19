@@ -6,41 +6,17 @@ OK = 0
 
 def reverse_if_and_then(list_t):
 
-
-    #
-    #
-    #       Probleme gestion ecriture : reecriture sur la liste original au lieux decrire sur la copie
-    #
-    #
-
-
-    # fonction de recopie de la liste entrer
     list_tmp = []
     for n, zone in enumerate(list_t):
         list_tmp.append([])
         for o, line in enumerate(zone):
             list_tmp[n].append([])
             for p, element in enumerate(line):
-                list_tmp[n][o].append(element)
+                list_tmp[n][o].append([list_t[n][o][p][0]])
 
     # pointeur sur les liste if then
     list_not_if = list_tmp[0]
     list_not_then = list_tmp[1]
-
-    # modification fonctionnen de la liste then
-    list_not_then[0][0] = "9"
-
-
-    #print("\n\nORIGINAL AVANT\n")
-    #for bite in list_t[0]:
-    #    print(re.sub(r'''\[*\]*\'*\s*,*''', '', str(bite)))
-    #for bite in list_t[1]:
-    #    print(re.sub(r'''\[*\]*\'*\s*,*''', '', str(bite)))
-    #print("\n\nCOPIE AVANT\n")
-    #for bite in list_not_if:
-    #    print(re.sub(r'''\[*\]*\'*\s*,*''', '', str(bite)))
-    #for bite in list_not_then:
-    #    print(re.sub(r'''\[*\]*\'*\s*,*''', '', str(bite)))
 
 
     # boucle de modification de la liste not if
@@ -63,18 +39,7 @@ def reverse_if_and_then(list_t):
             elif "!" in element[0]:
                 element[0] = element[0][1]
 
-
-    #print("\n\nORIGINAL APRES\n")
-    #for bite in list_t[0]:
-    #    print(re.sub(r'''\[*\]*\'*\s*,*''', '', str(bite)))
-    #for bite in list_t[1]:
-    #    print(re.sub(r'''\[*\]*\'*\s*,*''', '', str(bite)))
-    #print("\n\nCOPIE APRES\n")
-    #for bite in list_not_if:
-    #    print(re.sub(r'''\[*\]*\'*\s*,*''', '', str(bite)))
-    #for bite in list_not_then:
-    #    print(re.sub(r'''\[*\]*\'*\s*,*''', '', str(bite)))
-
+    #extension de la liste avec les regles inverse
     list_t[0].extend(list_not_if)
     list_t[1].extend(list_not_then)
 
@@ -126,13 +91,20 @@ def simply_list(list_):
                     if if_exist(list_if[y-1], list_then[y-1][0]):
                         msg = elem_search[0][0]
                         return 'loop', msg
+
+                    # probleme de controle de boucle
+                    # and (not(elem_search[0] in list_if[y])):
+
                     if elem == elem_search[0]:
+                        print("\tmatch")
+                        print("\t\t", (not(elem_search[0] in list_if[y])))
                         line_search.pop(n)
                         line_search.insert(n, ["("])
                         line_search.insert(n + 1, [")"])
                         for o, elt in enumerate(list_if[x]):
                             line_search.insert(n + 1 + o, elt)
                         flag_next = 1
+
     list_to_str(list_[0])
     list_to_str(list_[1])
     return OK
@@ -183,10 +155,9 @@ def translat_to_list(list_total):
     list_total.append(to_list(list_if))
     list_total.append(to_list(list_then))
     convert_to_only_one_then(list_total)
-
-    #test
     reverse_if_and_then(list_total)
-    #test
+
+    errors = simply_list(list_total)
 
     # Only Prints
     max_l = len(max([_ for _ in list_total[0]], key=len))
@@ -199,7 +170,6 @@ def translat_to_list(list_total):
         print(f'{str_1:{max_l + 5}s}\t{str_2:s}')
     print('\n')
 
-    errors = simply_list(list_total)
 
     return errors
 
