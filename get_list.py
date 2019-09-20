@@ -88,16 +88,10 @@ def simply_list(list_):
             x = x + 1
             for y, line_search in enumerate(list_if):
                 for n, elem in enumerate(line_search):
-                    if if_exist(list_if[y-1], list_then[y-1][0]):
-                        msg = elem_search[0][0]
-                        return 'loop', msg
-
-                    # probleme de controle de boucle
-                    # and (not(elem_search[0] in list_if[y])):
-
                     if elem == elem_search[0]:
-                        print("\tmatch")
-                        print("\t\t", (not(elem_search[0] in list_if[y])))
+                        if if_exist(list_if[m], list_then[y][0]):
+                            msg = [elem_search[0][0], list_then[y][0][0]]
+                            return 'loop', msg
                         line_search.pop(n)
                         line_search.insert(n, ["("])
                         line_search.insert(n + 1, [")"])
@@ -157,7 +151,7 @@ def translat_to_list(list_total):
     convert_to_only_one_then(list_total)
     reverse_if_and_then(list_total)
 
-    errors = simply_list(list_total)
+
 
     # Only Prints
     max_l = len(max([_ for _ in list_total[0]], key=len))
@@ -170,6 +164,7 @@ def translat_to_list(list_total):
         print(f'{str_1:{max_l + 5}s}\t{str_2:s}')
     print('\n')
 
+    errors = simply_list(list_total)
 
     return errors
 

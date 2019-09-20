@@ -22,7 +22,7 @@ def disp_errors_dict(err):
         'or': f'Expression probably false\n\n'
               f'Unexpected rule, ambiguous condition in then expression : \x1b[1;37;41m {err[1]} \x1b[0m\n\n',
         'loop': f'Error\n\n'
-              f'A loop has been found concerning : \x1b[1;37;41m {err[1]} \x1b[0m\n\n',
+              f'A loop has been found concerning : \x1b[1;37;41m {err[1][0]} \x1b[0m with \x1b[1;37;41m {err[1][1]} \x1b[0m\n\n',
     }
 
     print(f'\n{dictionary[err[0]]}')
