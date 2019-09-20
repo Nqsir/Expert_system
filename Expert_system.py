@@ -13,17 +13,13 @@ def check_elements(x_file):
     queries = []
     fact = 0
 
-    # Link to the working REGEX, still need a lot of parse : https://regex101.com/r/2x2D3C/6
-
     for x_line in x_file:
         facts_pattern = re.findall(r'''
                                    ^([=])([A-Z]+)|^([=])$       # =ABC or =
-                                   '''
-                                   , x_line, re.VERBOSE)
+                                   ''', x_line, re.VERBOSE)
         queries_pattern = re.findall(r'''
                                      ^([?])([A-Z]+)$            # ?ABC
-                                     '''
-                                     , x_line, re.VERBOSE)
+                                     ''', x_line, re.VERBOSE)
         rules_pattern = re.findall(r'''
                                    (^\(*!?[A-Z]\)*              # The starting expression (!A or (A or A
                                    ([\+\|\^]\(*!?[A-Z]\)*)*)    # The repeated scheme + or | or ^ and !A or A) or A
@@ -79,6 +75,7 @@ def check_elements(x_file):
     if not rules:
         return 'rule_0', ''
 
+    # -------------------------------- START Only prints ------------------------------------------
     max_l = len(max([_[0] for _ in rules], key=len))
 
     print('\nrules = \n'
@@ -90,12 +87,29 @@ def check_elements(x_file):
 
     print(f'facts = {facts}')
     print(f'queries = {queries}')
+    # -------------------------------- END Only prints ------------------------------------------
 
     errors = translat_to_list(rules)
     if errors:
         return errors
 
     return OK
+
+
+def extracting_file(file_):
+    extract_file = []
+    with open(file_, 'r') as in_file:
+        for line in in_file:
+            line = line.replace(' ', '')
+            if not line.startswith('#') and line != '\n':
+                if '#' in line:
+                    rest = line.split('#')
+                else:
+                    rest = line.split('\n')
+
+                extract_file.append(rest[0])
+
+    return extract_file
 
 
 if __name__ == '__main__':
@@ -108,17 +122,7 @@ if __name__ == '__main__':
     if os.path.exists(file)and os.path.isfile(file) and file.endswith('.txt'):
         errors = []
         try:
-            extracted_file = []
-            with open(file, 'r') as in_file:
-                for line in in_file:
-                    line = line.replace(' ', '')
-                    if not line.startswith('#') and line != '\n':
-                        if '#' in line:
-                            rest = line.split('#')
-                        else:
-                            rest = line.split('\n')
-
-                        extracted_file.append(rest[0])
+            extracted_file = extracting_file(file)
 
             errors = check_elements(extracted_file)
             if errors:
