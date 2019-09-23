@@ -1,11 +1,11 @@
 import re
-import copy
 
 CONST_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+CONST_NOT = "!"
 OK = 0
 
 def reverse_if_and_then(list_t):
-
+    # boucle de copie de la list_t
     list_tmp = []
     for n, zone in enumerate(list_t):
         list_tmp.append([])
@@ -46,6 +46,7 @@ def reverse_if_and_then(list_t):
 
 
 def list_to_str(list_):
+    # boucle de convertion de la liste en string
     for n, elt in enumerate(list_):
         string = re.sub(r'''\[*\]*\'*\s*,*''', '', str(elt))
         while True:
@@ -66,6 +67,7 @@ def simply_list(list_):
     list_if = list_[0]
     list_then = list_[1]
 
+    # boucle de regroupement des regle multiple
     x = 0
     while x < len(list_then):
         y = x+1
@@ -79,6 +81,7 @@ def simply_list(list_):
             y = y + 1
         x = x + 1
 
+    # boucle de recherche des relation entre regle, de controle de bouclage puis d'insertion
     x = 0
     flag_next = 1
     while flag_next > 0:
@@ -109,6 +112,7 @@ def convert_to_only_one_then(list_):
     list_then = list_[1]
     list_and = ["+"]
 
+    # boucle de dedoublage multi conclusion
     for n, line in enumerate(list_then):
         x = 0
         while x < len(line):
@@ -151,7 +155,7 @@ def translat_to_list(list_total):
     convert_to_only_one_then(list_total)
     reverse_if_and_then(list_total)
 
-
+    errors = simply_list(list_total)
 
     # Only Prints
     max_l = len(max([_ for _ in list_total[0]], key=len))
@@ -164,8 +168,5 @@ def translat_to_list(list_total):
         print(f'{str_1:{max_l + 5}s}\t{str_2:s}')
     print('\n')
 
-    errors = simply_list(list_total)
-
     return errors
-
 
