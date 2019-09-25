@@ -1,3 +1,5 @@
+import re
+
 CONST_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 CONST_NOT = '!'
@@ -9,11 +11,11 @@ CONST_NXOR = '¨'
 CONST_TRUE = '1'
 CONST_FALSE = '0'
 
-CONST_REGEX_UNITARY = ''
-CONST_REGEX_GROUP = ''
-CONST_REGEX_PAIR_AND = ''
-CONST_REGEX_PAIR_OR = ''
-CONST_REGEX_PAIR_XOR = ''
+CONST_REGEX_UNITARY = r'(\(!?[A-Z01]\)|!?[A-Z01])'  # regex selection valeur simple
+CONST_REGEX_GROUP = r'(\(!?[A-Z01]([\+\|\^]!?[A-Z01])+\)|!?[A-Z01]([\+\|\^]!?[A-Z01])+)'  # regex selection group
+CONST_REGEX_PAIR_AND = r'(!?[A-Z01]\+!?[A-Z01])'  # regex and
+CONST_REGEX_PAIR_OR = r'(!?[A-Z01]\|!?[A-Z01])'  # regex or
+CONST_REGEX_PAIR_XOR = r'(!?[A-Z01]\^!?[A-Z01])'  # regex xor
 
 
 class Resolver:
@@ -23,25 +25,31 @@ class Resolver:
         self.list_then = list_total[1]
         self.list_fact = list_fact
         self.list_query = list_query
-        self.list_unknow = []
+        self.list_unknown = []
         self.value = {'A': '', 'B': '', 'C': '', 'D': '', 'E': '', 'F': '', 'G': '', 'H': '', 'I': '', 'J': '', 'K': '',
                       'L': '', 'M': '', 'N': '', 'O': '', 'P': '', 'Q': '', 'R': '', 'S': '', 'T': '', 'U': '', 'V': '',
                       'W': '', 'X': '', 'Y': '', 'Z': ''}
+        self.init_value()
+
+        for n, query in enumerate(self.list_query):
+            pos = self.list_then[0].index(query[0])
+            self.value[query] = self.order(self.list_if[pos][0])
 
     # ------------------------------------------------------------------------------------------------------------------
     #   methode initialisation des valeurs dictionnaire
     # ------------------------------------------------------------------------------------------------------------------
+
     def init_value(self):
         for n, then in enumerate(self.list_then):
-            self.value[then] = CONST_FALSE
+            self.value[then[0]] = CONST_FALSE
         for n, fact in enumerate(self.list_fact):
-            self.value[fact] = CONST_TRUE
+            self.value[fact[0]] = CONST_TRUE
 
     # ------------------------------------------------------------------------------------------------------------------
     #   methode resolution
     # ------------------------------------------------------------------------------------------------------------------
     def order(self, line):
-        self.list_unknow.clear()
+        self.list_unknown.clear()
 
         # recherche pattern avec la regex unitaire
         tuple_regex_unitary = self.search_regex(line, CONST_REGEX_UNITARY)
@@ -57,10 +65,11 @@ class Resolver:
             else:
                 line.replace(element_unitary, tmp_str)
 
+
         # boucle principale de resolution
         flag_run = 1
         while flag_run == 1:
-            line_copy = line.copy()
+            line_copy = line
 
             # recherche pattern avec la reg regex de groupe
             tuple_regex_group = self.search_regex(line, CONST_REGEX_GROUP)
@@ -68,14 +77,27 @@ class Resolver:
             # boucle des goupe
             flag_regex_group = 1
             while flag_regex_group == 1:
-                group_copy = line.copy()
+                group_copy = line
                 for m, group in enumerate(tuple_regex_group):
+
+                    # boucle de toute les occurrence unitaire
+                    flag_regex_unitary = 1
+                    while flag_regex_unitary == 1:
+                        # creation d'une copie de la regle
+                        tmp_unitary_copy = line
+                        tuple_regex_unity = self.search_regex(group[m], CONST_REGEX_UNITARY)
+                        for n, unity in enumerate(tuple_regex_unity):
+                            # recuperation gestion unitee
+                            param = self.recup_val(unity)
+                            line.replace(tuple_regex_unity[n], param)
+                        if tmp_unitary_copy == line:
+                            flag_regex_unitary = 0
 
                     # boucle de toute les occurrence AND
                     flag_regex_pair_and = 1
                     while flag_regex_pair_and == 1:
                         # creation d'une copie de la regle
-                        tmp_and_copy = line.copy()
+                        tmp_and_copy = line
                         tuple_regex_pair_and = self.search_regex(group[m], CONST_REGEX_PAIR_AND)
                         for n, pair_and in enumerate(tuple_regex_pair_and):
                             param = self.recup_param(pair_and)
@@ -88,7 +110,7 @@ class Resolver:
                     flag_regex_pair_or = 1
                     while flag_regex_pair_or == 1:
                         # creation d'une copie de la regle
-                        tmp_or_copy = line.copy()
+                        tmp_or_copy = line
                         tuple_regex_pair_or = self.search_regex(group[m], CONST_REGEX_PAIR_OR)
                         for n, pair_or in enumerate(tuple_regex_pair_or):
                             param = self.recup_param(pair_or)
@@ -101,7 +123,7 @@ class Resolver:
                     flag_regex_pair_xor = 1
                     while flag_regex_pair_xor == 1:
                         # creation d'une copie de la regle
-                        tmp_xor_copy = line.copy()
+                        tmp_xor_copy = line
                         tuple_regex_pair_xor = self.search_regex(group[m], CONST_REGEX_PAIR_XOR)
                         for n, pair_xor in enumerate(tuple_regex_pair_xor):
                             param = self.recup_param(pair_xor)
@@ -109,8 +131,18 @@ class Resolver:
                             line.replace(tuple_regex_pair_xor[n], rep)
                         if tmp_xor_copy == line:
                             flag_regex_pair_xor = 0
+
+
+
+                # condition d'arret de la boucle des groupe
                 if group_copy == line:
                     flag_regex_group = 0
+
+            # condition d'arret de la boucle principale
+            if line_copy == line:
+                flag_run = 0
+        print(f'line = {line}')
+        return line
 
     # ------------------------------------------------------------------------------------------------------------------
     #   methode de calcul AND
@@ -197,7 +229,7 @@ class Resolver:
                 tmp = CONST_FALSE
         else:
             tmp = param_1
-            self.list_unknow.append(tmp)
+            self.list_unknown.append(tmp)
         return tmp
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -208,15 +240,14 @@ class Resolver:
             tmp = self.value[param_1]
         else:
             tmp = param_1
-            self.list_unknow.append(tmp)
+            self.list_unknown.append(tmp)
         return tmp
 
     # ------------------------------------------------------------------------------------------------------------------
     #   methode de recherche regex dans une string
     # ------------------------------------------------------------------------------------------------------------------
     def search_regex(self, string, regex):
-
-        tuple_regex = list(set())
+        tuple_regex = list(set(re.findall(regex, string)))
         return tuple_regex
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -235,3 +266,11 @@ class Resolver:
             char = ""
         rep = pair.split(char)
         return rep
+
+    # ------------------------------------------------------------------------------------------------------------------
+    #   methode de recuperation valeur
+    # ------------------------------------------------------------------------------------------------------------------
+    def recup_val(self, val):
+        val = re.sub(r'''\(*\)*''', '', val)
+
+        return val

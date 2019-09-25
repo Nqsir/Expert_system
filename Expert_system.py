@@ -4,6 +4,8 @@ import re
 from Errors import disp_errors_dict
 from get_list import *
 
+from resolver import Resolver
+
 OK = 0
 
 
@@ -92,6 +94,8 @@ def check_elements(x_file):
     errors = translat_to_list(rules)
     if errors:
         return errors
+
+    test = Resolver(rules, facts, queries)
 
     return OK
 
