@@ -34,6 +34,7 @@ class Resolver:
 
 
         for n, query in enumerate(self.list_query):
+            print(f'-----{query}-----')
             pos = self.list_then.index(query)
             self.value[query[0]] = self.order(self.list_if[pos][0])
 
@@ -66,6 +67,7 @@ class Resolver:
                 line = line.replace(element_unitary, tmp_str)
         # boucle principale de resolution
         flag_run = 1
+        print(f'line = {line}')
         while flag_run == 1:
             line_copy = line
 
@@ -76,9 +78,7 @@ class Resolver:
             flag_regex_group = 1
             while flag_regex_group == 1:
                 group_copy = line
-                print(f'group = {tuple_regex_group}')
                 for m, group in enumerate(tuple_regex_group):
-
 
                     # boucle de toute les occurrence unitaire
                     flag_regex_unitary = 1
@@ -92,13 +92,14 @@ class Resolver:
                         if tmp_unitary_copy == line:
                             flag_regex_unitary = 0
 
+                    print(f'line = {line}')
+
                     # boucle de toute les occurrence AND
                     flag_regex_pair_and = 1
                     while flag_regex_pair_and == 1:
                         # creation d'une copie de la regle
                         tmp_and_copy = line
                         tuple_regex_pair_and = self.search_regex(group, CONST_REGEX_PAIR_AND)
-                        print(f'pair_and = {tuple_regex_pair_and}')
                         for n, pair_and in enumerate(tuple_regex_pair_and):
                             param = self.recup_param(pair_and)
                             rep = self.calc_and(param[0], param[1])
@@ -106,19 +107,22 @@ class Resolver:
                         if tmp_and_copy == line:
                             flag_regex_pair_and = 0
 
+                    print(f'line = {line}')
+
                     # boucle de toute les occurrence OR
                     flag_regex_pair_or = 1
                     while flag_regex_pair_or == 1:
                         # creation d'une copie de la regle
                         tmp_or_copy = line
                         tuple_regex_pair_or = self.search_regex(group, CONST_REGEX_PAIR_OR)
-                        print(f'pair_or = {tuple_regex_pair_or}')
                         for n, pair_or in enumerate(tuple_regex_pair_or):
                             param = self.recup_param(pair_or)
                             rep = self.calc_or(param[0], param[1])
                             line = line.replace(tuple_regex_pair_or[n], rep)
                         if tmp_or_copy == line:
                             flag_regex_pair_or = 0
+
+                    print(f'line = {line}')
 
                     # boucle de toute les occurrence XOR
                     flag_regex_pair_xor = 1
@@ -133,7 +137,7 @@ class Resolver:
                         if tmp_xor_copy == line:
                             flag_regex_pair_xor = 0
 
-
+                    print(f'line = {line}')
 
                 # condition d'arret de la boucle des groupe
                 if group_copy == line:
@@ -206,8 +210,12 @@ class Resolver:
     # ------------------------------------------------------------------------------------------------------------------
     def calc_xor(self, param_1, param_2):
         tmp = ""
-        if (CONST_NOT in param_1 or param_1 in CONST_CHAR) or (CONST_NOT in param_2 or param_2 in CONST_CHAR):
-            tmp = CONST_FALSE
+        if (CONST_NOT in param_1 or param_1 in CONST_CHAR) and (CONST_NOT in param_2 or param_2 in CONST_CHAR):
+            tmp = param_1 + '^' + param_2
+        elif CONST_NOT in param_1 or param_1 in CONST_CHAR:
+            tmp = param_1
+        elif CONST_NOT in param_2 or param_2 in CONST_CHAR:
+            tmp = param_2
         else:
             if param_1 == CONST_TRUE and param_2 == CONST_TRUE:
                 tmp = CONST_FALSE
@@ -255,8 +263,7 @@ class Resolver:
     #   methode de recuperation des parametre
     # ------------------------------------------------------------------------------------------------------------------
     def recup_param(self, pair):
-        pair = pair.replace('(', '')
-        pair = pair.replace(')', '')
+        pair = pair.replace('(', '').replace(')', '')
         if CONST_AND in pair:
             char = CONST_AND
         elif CONST_OR in pair:
