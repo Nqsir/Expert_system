@@ -11,8 +11,9 @@ CONST_NXOR = '¨'
 CONST_TRUE = '1'
 CONST_FALSE = '0'
 
-CONST_REGEX_UNITARY = r'(\(!?[A-Z01]\)|!?[A-Z01])'  # regex selection valeur simple
-CONST_REGEX_GROUP = r'(\(!?[A-Z01]([\+\|\^]!?[A-Z01])+\)|!?[A-Z01]([\+\|\^]!?[A-Z01])+)'  # regex selection group
+CONST_REGEX_UNITARY = r'(!?[A-Z01])'  # regex selection single value
+CONST_REGEX_UNITARY_PARENTHESES = r'(\(!?[A-Z01]\))'  # regex selection single value with parentheses
+CONST_REGEX_GROUP = r'(\([!A-Z01\+\|\^]+\))'  # regex selection group
 CONST_REGEX_PAIR_AND = r'(!?[A-Z01]\+!?[A-Z01])'  # regex and
 CONST_REGEX_PAIR_OR = r'(!?[A-Z01]\|!?[A-Z01])'  # regex or
 CONST_REGEX_PAIR_XOR = r'(!?[A-Z01]\^!?[A-Z01])'  # regex xor
@@ -31,14 +32,14 @@ class Resolver:
                       'W': '', 'X': '', 'Y': '', 'Z': ''}
         self.init_value()
 
+
         for n, query in enumerate(self.list_query):
-            pos = self.list_then[0].index(query[0])
-            self.value[query] = self.order(self.list_if[pos][0])
+            pos = self.list_then.index(query)
+            self.value[query[0]] = self.order(self.list_if[pos][0])
 
     # ------------------------------------------------------------------------------------------------------------------
     #   methode initialisation des valeurs dictionnaire
     # ------------------------------------------------------------------------------------------------------------------
-
     def init_value(self):
         for n, then in enumerate(self.list_then):
             self.value[then[0]] = CONST_FALSE
@@ -53,7 +54,6 @@ class Resolver:
 
         # recherche pattern avec la regex unitaire
         tuple_regex_unitary = self.search_regex(line, CONST_REGEX_UNITARY)
-
         # boucle remplacement des lettre par leur valeur
         for n, element_unitary in enumerate(tuple_regex_unitary):
             if CONST_NOT in element_unitary:
@@ -61,11 +61,9 @@ class Resolver:
             else:
                 tmp_str = self.calc_pos(element_unitary)
             if element_unitary == tmp_str:
-                break
+                pass
             else:
-                line.replace(element_unitary, tmp_str)
-
-
+                line = line.replace(element_unitary, tmp_str)
         # boucle principale de resolution
         flag_run = 1
         while flag_run == 1:
@@ -78,18 +76,19 @@ class Resolver:
             flag_regex_group = 1
             while flag_regex_group == 1:
                 group_copy = line
+                print(f'group = {tuple_regex_group}')
                 for m, group in enumerate(tuple_regex_group):
+
 
                     # boucle de toute les occurrence unitaire
                     flag_regex_unitary = 1
                     while flag_regex_unitary == 1:
                         # creation d'une copie de la regle
                         tmp_unitary_copy = line
-                        tuple_regex_unity = self.search_regex(group[m], CONST_REGEX_UNITARY)
+                        tuple_regex_unity = self.search_regex(group, CONST_REGEX_UNITARY_PARENTHESES)
                         for n, unity in enumerate(tuple_regex_unity):
-                            # recuperation gestion unitee
                             param = self.recup_val(unity)
-                            line.replace(tuple_regex_unity[n], param)
+                            line = line.replace(tuple_regex_unity[n], param)
                         if tmp_unitary_copy == line:
                             flag_regex_unitary = 0
 
@@ -98,11 +97,12 @@ class Resolver:
                     while flag_regex_pair_and == 1:
                         # creation d'une copie de la regle
                         tmp_and_copy = line
-                        tuple_regex_pair_and = self.search_regex(group[m], CONST_REGEX_PAIR_AND)
+                        tuple_regex_pair_and = self.search_regex(group, CONST_REGEX_PAIR_AND)
+                        print(f'pair_and = {tuple_regex_pair_and}')
                         for n, pair_and in enumerate(tuple_regex_pair_and):
                             param = self.recup_param(pair_and)
                             rep = self.calc_and(param[0], param[1])
-                            str(line).replace(tuple_regex_pair_and[n], rep)
+                            line = line.replace(tuple_regex_pair_and[n], rep)
                         if tmp_and_copy == line:
                             flag_regex_pair_and = 0
 
@@ -111,11 +111,12 @@ class Resolver:
                     while flag_regex_pair_or == 1:
                         # creation d'une copie de la regle
                         tmp_or_copy = line
-                        tuple_regex_pair_or = self.search_regex(group[m], CONST_REGEX_PAIR_OR)
+                        tuple_regex_pair_or = self.search_regex(group, CONST_REGEX_PAIR_OR)
+                        print(f'pair_or = {tuple_regex_pair_or}')
                         for n, pair_or in enumerate(tuple_regex_pair_or):
                             param = self.recup_param(pair_or)
                             rep = self.calc_or(param[0], param[1])
-                            line.replace(tuple_regex_pair_or[n], rep)
+                            line = line.replace(tuple_regex_pair_or[n], rep)
                         if tmp_or_copy == line:
                             flag_regex_pair_or = 0
 
@@ -124,11 +125,11 @@ class Resolver:
                     while flag_regex_pair_xor == 1:
                         # creation d'une copie de la regle
                         tmp_xor_copy = line
-                        tuple_regex_pair_xor = self.search_regex(group[m], CONST_REGEX_PAIR_XOR)
+                        tuple_regex_pair_xor = self.search_regex(group, CONST_REGEX_PAIR_XOR)
                         for n, pair_xor in enumerate(tuple_regex_pair_xor):
                             param = self.recup_param(pair_xor)
                             rep = self.calc_xor(param[0], param[1])
-                            line.replace(tuple_regex_pair_xor[n], rep)
+                            line = line.replace(tuple_regex_pair_xor[n], rep)
                         if tmp_xor_copy == line:
                             flag_regex_pair_xor = 0
 

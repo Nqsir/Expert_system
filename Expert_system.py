@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 import re
 from Errors import disp_errors_dict
 from get_list import *
@@ -17,7 +18,7 @@ def check_elements(x_file):
 
     for x_line in x_file:
         facts_pattern = re.findall(r'''
-                                   ^([=])([A-Z]+)|^([=])$       # =ABC or =
+                                   ^(=)([A-Z]+)|^([=])$       # =ABC or =
                                    ''', x_line, re.VERBOSE)
         queries_pattern = re.findall(r'''
                                      ^([?])([A-Z]+)$            # ?ABC
@@ -32,13 +33,15 @@ def check_elements(x_file):
 
         if queries_pattern:
             if not queries:
-                queries.append(queries_pattern[0][1])
+                for q in queries_pattern[0][1]:
+                    queries.append(list(q))
             else:
                 return 'query_1', x_line
 
         elif facts_pattern:
             if not facts:
-                facts.append(facts_pattern[0][1])
+                for f in facts_pattern[0][1]:
+                    facts.append(list(f))
                 fact = 1
             else:
                 return 'fact_1', x_line
@@ -133,6 +136,6 @@ if __name__ == '__main__':
                 disp_errors_dict(errors)
 
         except PermissionError:
-            print('\x1b[1;37;41m Permission error, failed opening the file \x1b[0m\n')
+            sys.exit(print('\x1b[1;37;41m Permission error, failed opening the file \x1b[0m\n'))
     else:
-        print(f'\x1b[1;37;41mThe selected file must be a text file i.e. with extension ".txt" \x1b[0m\n')
+        sys.exit(print(f'\x1b[1;37;41mThe selected file must be a text file i.e. with extension ".txt" \x1b[0m\n'))
