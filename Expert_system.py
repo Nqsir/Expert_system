@@ -3,7 +3,7 @@ import os
 import sys
 import re
 from Errors import disp_errors_dict
-from get_list import *
+from get_list import translat_to_list
 
 from resolver import Resolver
 
