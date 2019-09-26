@@ -6,7 +6,6 @@ CONST_NOT = '!'
 CONST_AND = '+'
 CONST_OR = '|'
 CONST_XOR = '^'
-CONST_NXOR = '¨'
 
 CONST_TRUE = '1'
 CONST_FALSE = '0'
@@ -27,31 +26,39 @@ class Resolver:
         self.list_fact = list_fact
         self.list_query = list_query
         self.list_unknown = []
-        self.value = {'A': '', 'B': '', 'C': '', 'D': '', 'E': '', 'F': '', 'G': '', 'H': '', 'I': '', 'J': '', 'K': '',
-                      'L': '', 'M': '', 'N': '', 'O': '', 'P': '', 'Q': '', 'R': '', 'S': '', 'T': '', 'U': '', 'V': '',
-                      'W': '', 'X': '', 'Y': '', 'Z': ''}
+        self.value = {}
         self.init_value()
-
-
         for n, query in enumerate(self.list_query):
             print(f'-----{query}-----')
-            pos = self.list_then.index(query)
-            self.value[query[0]] = self.order(self.list_if[pos][0])
+            if query in self.list_then:
+                pos = self.list_then.index(query)
+                self.value[query[0]] = self.order(self.list_if[pos][0])
+
+        for m, query in enumerate(self.list_query):
+            print(f' for {query} the reponse is {self.value[query[0]]}')
+
 
     # ------------------------------------------------------------------------------------------------------------------
     #   methode initialisation des valeurs dictionnaire
     # ------------------------------------------------------------------------------------------------------------------
     def init_value(self):
+        for char in CONST_CHAR:
+            self.value[char] = CONST_FALSE
+            self.value[f'!{char}'] = CONST_TRUE
         for n, then in enumerate(self.list_then):
-            self.value[then[0]] = CONST_FALSE
+            self.value[then[0]] = ''
         for n, fact in enumerate(self.list_fact):
             self.value[fact[0]] = CONST_TRUE
+            self.value[f'!{fact[0]}'] = CONST_FALSE
+
+        print(f'self.value = {self.value}')
 
     # ------------------------------------------------------------------------------------------------------------------
     #   methode resolution
     # ------------------------------------------------------------------------------------------------------------------
     def order(self, line):
         self.list_unknown.clear()
+        line = f'({line})'
 
         # recherche pattern avec la regex unitaire
         tuple_regex_unitary = self.search_regex(line, CONST_REGEX_UNITARY)
@@ -73,7 +80,7 @@ class Resolver:
 
             # recherche pattern avec la reg regex de groupe
             tuple_regex_group = self.search_regex(line, CONST_REGEX_GROUP)
-
+            print(f'groupe = {tuple_regex_group}')
             # boucle des goupe
             flag_regex_group = 1
             while flag_regex_group == 1:
@@ -231,13 +238,18 @@ class Resolver:
     #   methode de remplacement de la valeur negative
     # ------------------------------------------------------------------------------------------------------------------
     def calc_neg(self, param_1):
+        print(f'calc_neg_param_1 = {param_1}')
         if self.value[param_1] != '':
-            if self.value[param_1] == CONST_FALSE:
+            # if self.value[param_1] == CONST_FALSE:
+            if self.value[param_1] == CONST_TRUE:
                 tmp = CONST_TRUE
+                print(f'1 = {tmp}')
             else:
                 tmp = CONST_FALSE
+                print(f'2 = {tmp}')
         else:
             tmp = param_1
+            print(f'3 = {tmp}')
             self.list_unknown.append(tmp)
         return tmp
 
