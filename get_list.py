@@ -93,8 +93,7 @@ def simply_list(list_):
                 for n, elem in enumerate(line_search):
                     if elem == elem_search[0]:
                         if if_exist(list_if[m], list_then[y][0]):
-                            msg = [elem_search[0][0], list_then[y][0][0]]
-                            return 'loop', msg
+                            return 'loop', list_then[y][0][0]
                         line_search.pop(n)
                         line_search.insert(n, ["("])
                         line_search.insert(n + 1, [")"])

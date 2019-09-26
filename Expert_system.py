@@ -40,9 +40,9 @@ def check_elements(x_file):
 
         elif facts_pattern:
             if not facts:
+                fact = 1
                 for f in facts_pattern[0][1]:
                     facts.append(list(f))
-                fact = 1
             else:
                 return 'fact_1', x_line
 
@@ -71,11 +71,14 @@ def check_elements(x_file):
 
             rules.append([f'({rules_pattern[0][0]})', re.sub(r'''\(*\)*''', '', rules_pattern[0][3])])
         else:
-            return 'rule', x_line
+            return 'term', x_line
+
+    print(f'fact = {fact} and act = {not fact}')
 
     if not queries:
         return 'query_0', ''
     if not fact:
+        print('TEUB')
         return 'fact_0', ''
     if not rules:
         return 'rule_0', ''
