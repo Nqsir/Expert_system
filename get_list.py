@@ -1,8 +1,4 @@
-import re
-
-CONST_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-CONST_NOT = "!"
-OK = 0
+from Header import *
 
 def reverse_if_and_then(list_t):
     # boucle de copie de la list_t
@@ -154,7 +150,7 @@ def translat_to_list(list_total):
     convert_to_only_one_then(list_total)
     reverse_if_and_then(list_total)
 
-    errors = simply_list(list_total)
+    rep = simply_list(list_total)
 
     # Only Prints
     max_l = len(max([_ for _ in list_total[0]], key=len))
@@ -167,5 +163,5 @@ def translat_to_list(list_total):
         print(f'{str_1:{max_l + 5}s}\t{str_2:s}')
     print('\n')
 
-    return errors
+    return rep
 

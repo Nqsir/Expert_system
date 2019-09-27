@@ -1,13 +1,4 @@
-import argparse
-import os
-import sys
-import re
-from Errors import disp_errors_dict
-from get_list import translat_to_list
-
-from resolver import Resolver
-
-OK = 0
+from Header import *
 
 
 def check_elements(x_file):
@@ -101,7 +92,7 @@ def check_elements(x_file):
     if errors:
         return errors
 
-    test = Resolver(rules, facts, queries)
+    resolver(rules, facts, queries)
 
     return OK
 
