@@ -1,5 +1,9 @@
 from Header import *
 
+from Get_list import translat_to_list
+from Errors import disp_errors_dict
+from Resolver import resolver
+
 
 def check_elements(x_file):
     rules = []

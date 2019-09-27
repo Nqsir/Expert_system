@@ -4,25 +4,6 @@ import os
 import sys
 import re
 
-from Errors import disp_errors_dict
-
-from get_list import translat_to_list
-from get_list import to_list
-
-from resolver import resolver
-
-from File_calc_value import calc_neg
-from File_calc_value import calc_pos
-
-from File_unitary import operation_unitary
-from File_and import operation_and
-from File_or import operation_or
-from File_xor import operation_xor
-
-from File_useful_function import search_regex
-from File_useful_function import recup_param
-from File_useful_function import recup_val
-
 OK = 0
 
 CONST_CHAR = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'

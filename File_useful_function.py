@@ -3,6 +3,7 @@ from Header import *
 # ------------------------------------------------------------------------------------------------------------------
 #   fonction de recherche regex dans une string
 # ------------------------------------------------------------------------------------------------------------------
+
 def search_regex(string, regex):
     tuple_regex = list(set(re.findall(regex, string)))
     return tuple_regex

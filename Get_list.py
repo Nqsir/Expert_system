@@ -1,5 +1,6 @@
 from Header import *
 
+
 def reverse_if_and_then(list_t):
     # boucle de copie de la list_t
     list_tmp = []
@@ -40,7 +41,6 @@ def reverse_if_and_then(list_t):
     list_t[1].extend(list_not_then)
 
 
-
 def list_to_str(list_):
     # boucle de convertion de la liste en string
     for n, elt in enumerate(list_):
@@ -56,6 +56,7 @@ def if_exist(list_, element):
     for elem in list_:
         if element == elem:
             return True
+
     return False
 
 
@@ -99,6 +100,7 @@ def simply_list(list_):
 
     list_to_str(list_[0])
     list_to_str(list_[1])
+
     return OK
 
 
@@ -135,6 +137,7 @@ def to_list(list_):
             if len(list_tmp):
                 list_tmp_var.append(list_tmp)
         tmp.append(list_tmp_var)
+
     return tmp
 
 

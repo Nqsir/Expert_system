@@ -1,5 +1,7 @@
 from Header import *
 
+from File_useful_function import search_regex, recup_param
+
 # ------------------------------------------------------------------------------------------------------------------
 #   fonction de gestion AND
 # ------------------------------------------------------------------------------------------------------------------
@@ -17,12 +19,13 @@ def operation_and(line, group):
         if tmp_and_copy == line:
             flag_regex_pair_and = 0
 
+    return line
 
 # ------------------------------------------------------------------------------------------------------------------
 #   fonction de calcul AND
 # ------------------------------------------------------------------------------------------------------------------
 def calc_and(param_1, param_2):
-    tmp = ""
+    tmp = ''
     if (CONST_NOT in param_1 or param_1 in CONST_CHAR) and (CONST_NOT in param_2 or param_2 in CONST_CHAR):
         tmp = CONST_FALSE
     elif CONST_NOT in param_1 or param_1 in CONST_CHAR:

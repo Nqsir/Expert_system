@@ -1,5 +1,8 @@
 from Header import *
 
+from File_useful_function import search_regex, recup_param
+
+
 # ------------------------------------------------------------------------------------------------------------------
 #   fonction de gestion XOR
 # ------------------------------------------------------------------------------------------------------------------
@@ -17,12 +20,14 @@ def operation_xor(line, group):
         if tmp_xor_copy == line:
             flag_regex_pair_xor = 0
 
+    return line
+
 
 # ------------------------------------------------------------------------------------------------------------------
 #   fonction de calcul XOR
 # ------------------------------------------------------------------------------------------------------------------
 def calc_xor(param_1, param_2):
-    tmp = ""
+    tmp = ''
     if (CONST_NOT in param_1 or param_1 in CONST_CHAR) and (CONST_NOT in param_2 or param_2 in CONST_CHAR):
         tmp = param_1 + '^' + param_2
     elif CONST_NOT in param_1 or param_1 in CONST_CHAR:

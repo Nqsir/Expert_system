@@ -1,5 +1,8 @@
 from Header import *
 
+from File_useful_function import search_regex
+from File_useful_function import recup_val
+
 # ------------------------------------------------------------------------------------------------------------------
 #   fonction de gestion unitaire
 # ------------------------------------------------------------------------------------------------------------------
@@ -15,3 +18,5 @@ def operation_unitary(line, group):
             line = line.replace(tuple_regex_unity[n], param)
         if tmp_unitary_copy == line:
             flag_regex_unitary = 0
+
+    return line
