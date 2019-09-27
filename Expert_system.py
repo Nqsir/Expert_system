@@ -5,6 +5,7 @@ from Errors import disp_errors_dict
 from Resolver import resolver
 
 
+
 def check_elements(x_file):
     rules = []
     facts = []
@@ -68,12 +69,9 @@ def check_elements(x_file):
         else:
             return 'term', x_line
 
-    print(f'fact = {fact} and act = {not fact}')
-
     if not queries:
         return 'query_0', ''
     if not fact:
-        print('TEUB')
         return 'fact_0', ''
     if not rules:
         return 'rule_0', ''
@@ -81,21 +79,21 @@ def check_elements(x_file):
     # -------------------------------- START Only prints ------------------------------------------
     max_l = len(max([_[0] for _ in rules], key=len))
 
-    print('\nrules = \n'
+    print('\n=========== RULES =========== \n'
           f'{"IF":{max_l + 5}s}\t{"THEN"}')
     print(f'{"-------":{max_l + 5}s}\t{"-------"}')
     for r in rules:
         print(f'{r[0]:{max_l + 5}s}\t{r[1]:s}')
     print('\n')
 
-    print(f'facts = {facts}')
-    print(f'queries = {queries}')
+    print(f'=========== FACTS ===========\n {facts}\n')
+
+    print(f'========== QUERIES ==========\n {queries}\n')
     # -------------------------------- END Only prints ------------------------------------------
 
     errors = translat_to_list(rules)
     if errors:
         return errors
-
     resolver(rules, facts, queries)
 
     return OK

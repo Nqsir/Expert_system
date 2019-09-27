@@ -1,5 +1,6 @@
 from Header import *
 
+from File_useful_function import simply_bracket
 
 def reverse_if_and_then(list_t):
     # boucle de copie de la list_t
@@ -49,7 +50,8 @@ def list_to_str(list_):
             string = re.sub(r'''(\()(!?[A-Z])(\))''', r'\2', string)
             if not re.findall(r'''(\(!?[A-Z]\))''', string):
                 break
-        list_[n] = [string]
+
+        list_[n] = [simply_bracket(string)]
 
 
 def if_exist(list_, element):
