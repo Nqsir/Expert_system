@@ -1,7 +1,7 @@
 # Expert_system
 How to do simple logic. Or not-so-simple.
 
-[Currently bugged]
+[Currently in developing]
 
 Simle expert-system project
 
