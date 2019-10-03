@@ -1,9 +1,10 @@
-from Header import *
+from Header.Header import *
 
-from File_useful_function import simply_bracket
+from Modules.File_useful_function import simplify_parentheses
+
 
 def reverse_if_and_then(list_t):
-    # boucle de copie de la list_t
+    # list_t copying loop
     list_tmp = []
     for n, zone in enumerate(list_t):
         list_tmp.append([])
@@ -12,12 +13,11 @@ def reverse_if_and_then(list_t):
             for p, element in enumerate(line):
                 list_tmp[n][o].append([list_t[n][o][p][0]])
 
-    # pointeur sur les liste if then
+    # Pointing on list_if and list_then
     list_not_if = list_tmp[0]
     list_not_then = list_tmp[1]
 
-
-    # boucle de modification de la liste not if
+    # Modification loop for list_not_if
     for n, line in enumerate(list_not_if):
         for o, element in enumerate(line):
             if element[0] in CONST_CHAR:
@@ -29,7 +29,7 @@ def reverse_if_and_then(list_t):
             elif "|" in element[0]:
                 element[0] = "+"
 
-    # boucle de modification de la liste not them
+    # Modification loop for list_not_then
     for n, line in enumerate(list_not_then):
         for o, element in enumerate(line):
             if element[0] in CONST_CHAR:
@@ -37,13 +37,13 @@ def reverse_if_and_then(list_t):
             elif "!" in element[0]:
                 element[0] = element[0][1]
 
-    #extension de la liste avec les regles inverse
+    # Extending lists with list_not
     list_t[0].extend(list_not_if)
     list_t[1].extend(list_not_then)
 
 
 def list_to_str(list_):
-    # boucle de convertion de la liste en string
+    # Conversion loop from list to str
     for n, elt in enumerate(list_):
         string = re.sub(r'''\[*\]*\'*\s*,*''', '', str(elt))
         while True:
@@ -51,7 +51,7 @@ def list_to_str(list_):
             if not re.findall(r'''(\(!?[A-Z]\))''', string):
                 break
 
-        list_[n] = [simply_bracket(string)]
+        list_[n] = [simplify_parentheses(string)]
 
 
 def if_exist(list_, element):
@@ -66,7 +66,7 @@ def simply_list(list_):
     list_if = list_[0]
     list_then = list_[1]
 
-    # boucle de regroupement des regle multiple
+    # Grouping loop multiple rules
     x = 0
     while x < len(list_then):
         y = x+1
@@ -80,7 +80,7 @@ def simply_list(list_):
             y = y + 1
         x = x + 1
 
-    # boucle de recherche des relation entre regle, de controle de bouclage puis d'insertion
+    # Looking for relation between rules, checking infinite loop and insertion
     x = 0
     flag_next = 1
     while flag_next > 0:
@@ -111,7 +111,6 @@ def convert_to_only_one_then(list_):
     list_then = list_[1]
     list_and = ["+"]
 
-    # boucle de dedoublage multi conclusion
     for n, line in enumerate(list_then):
         x = 0
         while x < len(line):
@@ -143,7 +142,7 @@ def to_list(list_):
     return tmp
 
 
-def translat_to_list(list_total):
+def translat_to_list(list_total, _logger):
     list_if = []
     list_then = []
     for n, elt in enumerate(list_total):
@@ -157,16 +156,18 @@ def translat_to_list(list_total):
 
     rep = simply_list(list_total)
 
-    # Only Prints
-    max_l = len(max([_ for _ in list_total[0]], key=len))
-    print('\nrules = \n'
-          f'{"IF":{max_l + 5}s}\t{"THEN"}')
-    print(f'{"-------":{max_l + 5}s}\t{"-------"}')
+    # -------------------------------- START Only prints ------------------------------------------
+    max_l = len(max([_[0] for _ in list_total[0]], key=len))
+
+    _logger.debug('\n=========== EXTENDED RULES =========== \n'
+                  f'{"IF":{max_l + 5}s}\t{"THEN"}')
+    _logger.debug(f'{"-" * max_l:{max_l + 5}s}\t{"------"}')
     for n in range(len(list_total[0])):
         str_1 = re.sub(r'''\[*\]*\'*\s*,*''', '', str(list_total[0][n]))
         str_2 = re.sub(r'''\[*\]*\'*\s*,*''', '', str(list_total[1][n]))
-        print(f'{str_1:{max_l + 5}s}\t{str_2:s}')
-    print('\n')
+        _logger.debug(f'{str_1:{max_l + 5}s}\t{str_2:s}')
+    _logger.debug('\n')
+    # -------------------------------- END Only prints ------------------------------------------
 
     return rep
 

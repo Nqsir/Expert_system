@@ -1,5 +1,5 @@
 
-def disp_errors_dict(err):
+def display_errors_dict(err):
     dictionary = {
         'query_0': f'Expression probably false\n\n'
                    f'Unexpected query, \x1b[1;37;41m no query found \x1b[0m\n\n',

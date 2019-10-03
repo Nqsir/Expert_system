@@ -1,12 +1,11 @@
-from Header import *
+from Header.Header import *
 
-from Get_list import translat_to_list
-from Errors import disp_errors_dict
-from Resolver import resolver
+from Modules.Get_list import translat_to_list
+from Modules.Errors import display_errors_dict
+from Modules.Solver import solver
 
 
-
-def check_elements(x_file):
+def check_elements(x_file, logger_):
     rules = []
     facts = []
     queries = []
@@ -79,22 +78,22 @@ def check_elements(x_file):
     # -------------------------------- START Only prints ------------------------------------------
     max_l = len(max([_[0] for _ in rules], key=len))
 
-    print('\n=========== RULES =========== \n'
-          f'{"IF":{max_l + 5}s}\t{"THEN"}')
-    print(f'{"-------":{max_l + 5}s}\t{"-------"}')
+    logger_.debug('\n=========== STARTING RULES =========== \n'
+                  f'{"IF":{max_l + 5}s}\t{"THEN"}')
+    logger_.debug(f'{"-" * max_l:{max_l + 5}s}\t{"------"}')
     for r in rules:
-        print(f'{r[0]:{max_l + 5}s}\t{r[1]:s}')
-    print('\n')
+        logger_.debug(f'{r[0]:{max_l + 5}s}\t{r[1]:s}')
+    logger_.debug('\n')
 
-    print(f'=========== FACTS ===========\n {facts}\n')
+    logger_.debug(f'=========== FACTS ===========\n {facts}\n')
 
-    print(f'========== QUERIES ==========\n {queries}\n')
+    logger_.debug(f'========== QUERIES ==========\n {queries}\n')
     # -------------------------------- END Only prints ------------------------------------------
 
-    errors = translat_to_list(rules)
-    if errors:
-        return errors
-    resolver(rules, facts, queries)
+    errors_ = translat_to_list(rules, logger_)
+    if errors_:
+        return errors_
+    solver(rules, facts, queries)
 
     return OK
 
@@ -118,6 +117,18 @@ def extracting_file(file_):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='py Expert_system.py')
     parser.add_argument('text_file', help='A text file containing instructions')
+    parser.add_argument('-d', '--details', action='store_true', help='Detailed computation', default=False)
+    args = parser.parse_args()
+    logger = logging.getLogger()
+    if args.details:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.DEBUG)
+    logger.addHandler(stream_handler)
+    logger.debug('\n/*/-------\n Detailed mode activated \n/*/-------\n')
     args = parser.parse_args()
 
     file = os.path.join(os.getcwd(), args.text_file)
@@ -127,9 +138,9 @@ if __name__ == '__main__':
         try:
             extracted_file = extracting_file(file)
 
-            errors = check_elements(extracted_file)
+            errors = check_elements(extracted_file, logger)
             if errors:
-                disp_errors_dict(errors)
+                display_errors_dict(errors)
 
         except PermissionError:
             sys.exit(print('\x1b[1;37;41m Permission error, failed opening the file \x1b[0m\n'))

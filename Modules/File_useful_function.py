@@ -1,20 +1,18 @@
-import time
+from Header.Header import *
 
-from Header import *
 
 # ------------------------------------------------------------------------------------------------------------------
-#   fonction de recherche regex dans une string
+#   Looking for regex in string function
 # ------------------------------------------------------------------------------------------------------------------
-
 def search_regex(string, regex):
     tuple_regex = list(set(re.findall(regex, string)))
     return tuple_regex
 
 
 # ------------------------------------------------------------------------------------------------------------------
-#   fonction de recuperation des parametre
+#   Getting parameters function
 # ------------------------------------------------------------------------------------------------------------------
-def recup_param(pair):
+def get_param(pair):
     pair = pair.replace('(', '').replace(')', '')
     if CONST_AND in pair:
         char = CONST_AND
@@ -29,27 +27,27 @@ def recup_param(pair):
 
 
 # ------------------------------------------------------------------------------------------------------------------
-#   fonction de recuperation valeur
+#   Getting value function
 # ------------------------------------------------------------------------------------------------------------------
-def recup_val(val):
+def get_val(val):
     val = re.sub(r'''\(*\)*''', '', val)
     return val
 
 
 # ------------------------------------------------------------------------------------------------------------------
-#   fonction de suppression parenthèse
+#   Deleting parentheses function
 # ------------------------------------------------------------------------------------------------------------------
-def simply_bracket(rules):
-    list_bracket = []
-    size_bracket = 0
+def simplify_parentheses(rules):
+    list_parentheses = []
+    size_parentheses = 0
     pile = []
 
     for n, elem in enumerate(rules):
         if elem == '(':
             pile.insert(0, n)
         if elem == ')':
-            list_bracket.append([pile[0], n])
-            size_bracket += 1
+            list_parentheses.append([pile[0], n])
+            size_parentheses += 1
             pile.pop(0)
 
     flag_run = 1
@@ -57,17 +55,20 @@ def simply_bracket(rules):
     tmp = list(rules)
     while flag_run == 1:
         flag = 0
-        if index + 1 < size_bracket:
-            if (list_bracket[index + 1][0] == list_bracket[index][0] + 1 or list_bracket[index + 1][0] == list_bracket[index][0] - 1) and (list_bracket[index + 1][1] == list_bracket[index][1] + 1 or list_bracket[index + 1][1] == list_bracket[index][1] - 1):
-                name_A = list_bracket[index][0]
-                name_B = list_bracket[index][1]
-                list_bracket.pop(index)
-                size_bracket -= 1
-                tmp[name_A] = " "
-                tmp[name_B] = ' '
+        if index + 1 < size_parentheses:
+            if (list_parentheses[index + 1][0] == list_parentheses[index][0] + 1
+                or list_parentheses[index + 1][0] == list_parentheses[index][0] - 1) \
+                    and (list_parentheses[index + 1][1] == list_parentheses[index][1] + 1
+                         or list_parentheses[index + 1][1] == list_parentheses[index][1] - 1):
+                name_a = list_parentheses[index][0]
+                name_b = list_parentheses[index][1]
+                list_parentheses.pop(index)
+                size_parentheses -= 1
+                tmp[name_a] = " "
+                tmp[name_b] = ' '
                 index = 0
                 flag = 1
-        if index >= size_bracket:
+        if index >= size_parentheses:
             flag_run = 0
         if flag == 0:
             index += 1

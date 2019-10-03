@@ -1,8 +1,8 @@
-from Header import *
+from Header.Header import *
 
 
 # ------------------------------------------------------------------------------------------------------------------
-#   fonction de remplacement de la valeur negative
+#   Replacement function of negative value
 # ------------------------------------------------------------------------------------------------------------------
 def calc_neg(param_1, value, list_unknown):
     if value[param_1] != '':
@@ -18,7 +18,7 @@ def calc_neg(param_1, value, list_unknown):
 
 
 # ------------------------------------------------------------------------------------------------------------------
-#   fonction de remplacement de la valeur positive
+#   Replacement function of positive value
 # ------------------------------------------------------------------------------------------------------------------
 def calc_pos(param_1, value, list_unknown):
     if value[param_1] != '':
